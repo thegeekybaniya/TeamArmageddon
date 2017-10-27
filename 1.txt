@@ -1,0 +1,11 @@
+Checkpoint-1
+
+Current Progress:
+
+1-Bot Under Training
+
+2-Bot Backend Under Development
+
+3-Bot Deployed on FB Page - https://www.facebook.com/HussainBot-930218523820510/ 
+
+(currently you won't be able to chat as the bot cannot be made public until some formalities are undertaken.)
