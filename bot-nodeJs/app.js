@@ -64,12 +64,15 @@ app.get('/', function (req, res) {
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
 	console.log("request");
-	if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === config.FB_VERIFY_TOKEN) {
-		res.status(200).send(req.query['hub.challenge']);
-	} else {
-		console.error("Failed validation. Make sure the validation tokens match.");
-		res.sendStatus(403);
-	}
+    res.status(200).send(req.query['hub.challenge']);
+    console.log("SUCKCESS");
+    //
+    // if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === config.FB_VERIFY_TOKEN) {
+	// 	res.status(200).send(req.query['hub.challenge']);
+	// } else {
+	// 	console.error("Failed validation. Make sure the validation tokens match.");
+	// 	res.sendStatus(403);
+	// }
 })
 
 /*
@@ -81,6 +84,8 @@ app.get('/webhook/', function (req, res) {
  */
 app.post('/webhook/', function (req, res) {
 	var data = req.body;
+
+
 	console.log(JSON.stringify(data));
 
 
@@ -182,11 +187,30 @@ function handleEcho(messageId, appId, metadata) {
 	console.log("Received echo for message %s and app %d with metadata %s", messageId, appId, metadata);
 }
 
-function handleApiAiAction(sender, action, responseText, contexts, parameters) {
+function handleApiAiAction(sender, action, responseText, contexts, parameters, hogya) {
+
+	console.log("Action Wala Call");
+
+
 	switch (action) {
+
+		case "shit_shit":
+			console.log("Shit  wala Call");
+
+
+
+            sendTextMessage(sender, 'Kela');
+
+
+            if (hogya==false) {
+				sendTextMessage(sender, 'Loda Ho Gaya');
+			}
+			break;
+
+
 		default:
 			//unhandled action, just send back the text
-			sendTextMessage(sender, responseText);
+			sendTextMessage(sender, responseText+'Hellooooo');
 	}
 }
 
@@ -273,6 +297,7 @@ function handleApiAiResponse(sender, response) {
 	let action = response.result.action;
 	let contexts = response.result.contexts;
 	let parameters = response.result.parameters;
+	let hogya= response.result.actionIncomplete;
 
 	sendTypingOff(sender);
 
@@ -310,7 +335,7 @@ function handleApiAiResponse(sender, response) {
 		console.log('Unknown query' + response.result.resolvedQuery);
 		sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
 	} else if (isDefined(action)) {
-		handleApiAiAction(sender, action, responseText, contexts, parameters);
+		handleApiAiAction(sender, action, responseText, contexts, parameters,hogya);
 	} else if (isDefined(responseData) && isDefined(responseData.facebook)) {
 		try {
 			console.log('Response as formatted message' + responseData.facebook);
